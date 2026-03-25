@@ -4,18 +4,13 @@
  */
 package view;
 
-/**
- *
- * @author 2024122760121
- */
-public class FramePrincipal extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FramePrincipal.class.getName());
+import controler.ControlerInterface;
 
-    /**
-     * Creates new form FramePrincipal
-     */
-    public FramePrincipal() {
+public class FramePrincipal extends javax.swing.JFrame {
+    private ControlerInterface controlInterface;
+    
+    public FramePrincipal(ControlerInterface controlerInterface) {
+        controlInterface = controlerInterface;
         initComponents();
     }
 
@@ -29,26 +24,36 @@ public class FramePrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         menuBar1 = new javax.swing.JMenuBar();
-        menuVenda = new javax.swing.JMenu();
-        menuProduto = new javax.swing.JMenuItem();
-        menuFornecedores = new javax.swing.JMenuItem();
+        menuCadastro = new javax.swing.JMenu();
+        menuCadProduto = new javax.swing.JMenuItem();
+        menuCadFornecedores = new javax.swing.JMenuItem();
         menuEstoque = new javax.swing.JMenu();
         menuEntrada = new javax.swing.JMenuItem();
         menuSaida = new javax.swing.JMenuItem();
         menuRelatorio = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
+        menuListagem = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        menuVenda.setText("Cadastro");
+        menuCadastro.setText("Cadastro");
 
-        menuProduto.setText("Produto");
-        menuVenda.add(menuProduto);
+        menuCadProduto.setText("Produto");
+        menuCadProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadProdutoActionPerformed(evt);
+            }
+        });
+        menuCadastro.add(menuCadProduto);
 
-        menuFornecedores.setText("Fornecedores");
-        menuVenda.add(menuFornecedores);
+        menuCadFornecedores.setText("Fornecedores");
+        menuCadFornecedores.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCadFornecedoresActionPerformed(evt);
+            }
+        });
+        menuCadastro.add(menuCadFornecedores);
 
-        menuBar1.add(menuVenda);
+        menuBar1.add(menuCadastro);
 
         menuEstoque.setText("Venda");
 
@@ -63,8 +68,8 @@ public class FramePrincipal extends javax.swing.JFrame {
         menuRelatorio.setText("Relatórios");
         menuBar1.add(menuRelatorio);
 
-        jMenu1.setText("Listagem");
-        menuBar1.add(jMenu1);
+        menuListagem.setText("Listagem");
+        menuBar1.add(menuListagem);
 
         setJMenuBar(menuBar1);
 
@@ -82,40 +87,30 @@ public class FramePrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void menuCadProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadProdutoActionPerformed
+        // TODO add your handling code here:
+        controlInterface.abrirDialogCadProduto();
+    }//GEN-LAST:event_menuCadProdutoActionPerformed
+
+    private void menuCadFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadFornecedoresActionPerformed
+        // TODO add your handling code here:
+        controlInterface.abrirDialogCadFornecedores();
+    }//GEN-LAST:event_menuCadFornecedoresActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FramePrincipal().setVisible(true));
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar menuBar1;
+    private javax.swing.JMenuItem menuCadFornecedores;
+    private javax.swing.JMenuItem menuCadProduto;
+    private javax.swing.JMenu menuCadastro;
     private javax.swing.JMenuItem menuEntrada;
     private javax.swing.JMenu menuEstoque;
-    private javax.swing.JMenuItem menuFornecedores;
-    private javax.swing.JMenuItem menuProduto;
+    private javax.swing.JMenu menuListagem;
     private javax.swing.JMenu menuRelatorio;
     private javax.swing.JMenuItem menuSaida;
-    private javax.swing.JMenu menuVenda;
     // End of variables declaration//GEN-END:variables
 }
