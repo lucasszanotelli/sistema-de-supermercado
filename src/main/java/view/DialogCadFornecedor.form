@@ -92,9 +92,11 @@
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="78" max="-2" attributes="0"/>
-                          <Component id="buttonSalvar" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnSalvar" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="buttonLimpar" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnLimpar" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace pref="33" max="32767" attributes="0"/>
@@ -140,8 +142,9 @@
                   </Group>
                   <EmptySpace pref="53" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="buttonLimpar" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="buttonSalvar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnLimpar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnSalvar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -290,15 +293,26 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JButton" name="buttonSalvar">
+        <Component class="javax.swing.JButton" name="btnSalvar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Salvar"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="buttonLimpar">
+        <Component class="javax.swing.JButton" name="btnLimpar">
           <Properties>
             <Property name="text" type="java.lang.String" value="Limpar"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLimparActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="btnCancelar">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Cancelar"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCancelarActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

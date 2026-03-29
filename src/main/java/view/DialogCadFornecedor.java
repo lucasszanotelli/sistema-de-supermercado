@@ -49,8 +49,9 @@ public class DialogCadFornecedor extends javax.swing.JDialog {
         txtCidade = new javax.swing.JTextField();
         labelUF = new javax.swing.JLabel();
         cbUF = new javax.swing.JComboBox<>();
-        buttonSalvar = new javax.swing.JButton();
-        buttonLimpar = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
+        btnLimpar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -132,9 +133,21 @@ public class DialogCadFornecedor extends javax.swing.JDialog {
 
         cbUF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        buttonSalvar.setText("Salvar");
+        btnSalvar.setText("Salvar");
 
-        buttonLimpar.setText("Limpar");
+        btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
         panelPrincipal.setLayout(panelPrincipalLayout);
@@ -179,9 +192,11 @@ public class DialogCadFornecedor extends javax.swing.JDialog {
                                     .addComponent(txtRua)))))
                     .addGroup(panelPrincipalLayout.createSequentialGroup()
                         .addGap(78, 78, 78)
-                        .addComponent(buttonSalvar)
+                        .addComponent(btnSalvar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(buttonLimpar)))
+                        .addComponent(btnLimpar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancelar)))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
         panelPrincipalLayout.setVerticalGroup(
@@ -216,8 +231,9 @@ public class DialogCadFornecedor extends javax.swing.JDialog {
                     .addComponent(cbUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addGroup(panelPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonLimpar)
-                    .addComponent(buttonSalvar))
+                    .addComponent(btnLimpar)
+                    .addComponent(btnSalvar)
+                    .addComponent(btnCancelar))
                 .addContainerGap())
         );
 
@@ -243,9 +259,18 @@ public class DialogCadFornecedor extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCEPActionPerformed
 
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonLimpar;
-    private javax.swing.JButton buttonSalvar;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cbUF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel labelBairro;

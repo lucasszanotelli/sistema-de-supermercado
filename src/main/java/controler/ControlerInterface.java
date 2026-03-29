@@ -8,6 +8,7 @@ import java.awt.Frame;
 import java.lang.reflect.InvocationTargetException;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import view.DialogCadCliente;
 import view.DialogCadFornecedor;
 import view.DialogCadProduto;
 import view.FramePrincipal;
@@ -20,6 +21,7 @@ public class ControlerInterface {
     FramePrincipal framePrincipal = null;
     DialogCadProduto dlgCadProduto = null;
     DialogCadFornecedor dlgCadFornecedor = null;
+    DialogCadCliente dlgCadCliente = null;
     
         // ABRIR JDIALOG
     private JDialog abrirJanela(Frame parent, JDialog dlg, Class classe) {
@@ -36,7 +38,7 @@ public class ControlerInterface {
     
     public void abrirFramePrincipal(){
         if(framePrincipal == null){
-            framePrincipal = new FramePrincipal();
+            framePrincipal = new FramePrincipal(this);
         }
         framePrincipal.setVisible(true);
     }
@@ -46,7 +48,9 @@ public class ControlerInterface {
     public void abrirDialogCadFornecedores(){
         abrirJanela(framePrincipal, dlgCadFornecedor, DialogCadFornecedor.class);           
     }
-    
+    public void abrirDialogCadCliente(){
+        abrirJanela(framePrincipal, dlgCadCliente, DialogCadCliente.class);           
+    }
     
     
     

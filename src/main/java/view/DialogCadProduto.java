@@ -45,10 +45,10 @@ public class DialogCadProduto extends javax.swing.JDialog {
         labelValVenda = new javax.swing.JLabel();
         txtValVenda = new javax.swing.JTextField();
         labelFornecedor = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        buttonLimpar = new javax.swing.JButton();
-        buttonSalvar = new javax.swing.JButton();
-        buttonCancelar = new javax.swing.JButton();
+        cmbFornecedor = new javax.swing.JComboBox<>();
+        btnLimpar = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         labelQtd = new javax.swing.JLabel();
         spinnerQtd = new javax.swing.JSpinner();
 
@@ -85,7 +85,7 @@ public class DialogCadProduto extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(labelValVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtValVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtValVenda, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -105,41 +105,45 @@ public class DialogCadProduto extends javax.swing.JDialog {
 
         labelFornecedor.setText("Fornecedor");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbFornecedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        buttonLimpar.setText("Limpar");
-        buttonLimpar.addActionListener(new java.awt.event.ActionListener() {
+        btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonLimparActionPerformed(evt);
+                btnLimparActionPerformed(evt);
             }
         });
 
-        buttonSalvar.setText("Salvar");
-        buttonSalvar.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonSalvarActionPerformed(evt);
+                btnSalvarActionPerformed(evt);
             }
         });
 
-        buttonCancelar.setText("Cancelar");
-        buttonCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                buttonCancelarActionPerformed(evt);
+                btnCancelarActionPerformed(evt);
             }
         });
 
         labelQtd.setText("Quantidade");
+
+        spinnerQtd.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        spinnerQtd.setName(""); // NOI18N
+        spinnerQtd.setRequestFocusEnabled(false);
 
         javax.swing.GroupLayout panelIdProdutoLayout = new javax.swing.GroupLayout(panelIdProduto);
         panelIdProduto.setLayout(panelIdProdutoLayout);
         panelIdProdutoLayout.setHorizontalGroup(
             panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelIdProdutoLayout.createSequentialGroup()
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cmbFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(107, 107, 107)
                 .addComponent(labelQtd)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spinnerQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(spinnerQtd, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(panelIdProdutoLayout.createSequentialGroup()
                 .addContainerGap()
@@ -159,19 +163,19 @@ public class DialogCadProduto extends javax.swing.JDialog {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIdProdutoLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(txtCodProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
+                        .addGap(37, 37, 37)
                         .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelNome)
-                            .addComponent(txtNomeproduto, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(74, 74, 74))
+                            .addComponent(txtNomeproduto, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(labelNome))
+                        .addGap(55, 55, 55))
                     .addGroup(panelIdProdutoLayout.createSequentialGroup()
                         .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelIdProdutoLayout.createSequentialGroup()
-                                .addComponent(buttonSalvar)
+                                .addComponent(btnSalvar)
                                 .addGap(7, 7, 7)
-                                .addComponent(buttonLimpar)
+                                .addComponent(btnLimpar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(buttonCancelar))
+                                .addComponent(btnCancelar))
                             .addComponent(labelFornecedor))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
@@ -182,9 +186,9 @@ public class DialogCadProduto extends javax.swing.JDialog {
                     .addComponent(labelCodProduto)
                     .addComponent(labelNome))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNomeproduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCodProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtCodProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNomeproduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelIdProdutoLayout.createSequentialGroup()
@@ -196,14 +200,14 @@ public class DialogCadProduto extends javax.swing.JDialog {
                 .addComponent(labelFornecedor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelQtd)
                     .addComponent(spinnerQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(buttonSalvar)
-                    .addComponent(buttonLimpar)
-                    .addComponent(buttonCancelar))
+                    .addComponent(btnSalvar)
+                    .addComponent(btnLimpar)
+                    .addComponent(btnCancelar))
                 .addContainerGap())
         );
 
@@ -227,25 +231,25 @@ public class DialogCadProduto extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void buttonLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonLimparActionPerformed
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_buttonLimparActionPerformed
+    }//GEN-LAST:event_btnLimparActionPerformed
 
-    private void buttonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSalvarActionPerformed
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_buttonSalvarActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void buttonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelarActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_buttonCancelarActionPerformed
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonCancelar;
-    private javax.swing.JButton buttonLimpar;
-    private javax.swing.JButton buttonSalvar;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cbCategoria;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> cmbFornecedor;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSpinner jSpinner1;
