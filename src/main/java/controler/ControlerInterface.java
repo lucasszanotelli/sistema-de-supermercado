@@ -6,6 +6,9 @@ package controler;
 
 import java.awt.Frame;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import view.DialogCadCliente;
@@ -29,7 +32,7 @@ public class ControlerInterface {
     
     
     
-    private ControlerInterface(){
+    private ControlerInterface() throws ClassNotFoundException, SQLException{
         gerDominio = new GerenciadorDominio();
     }
        
@@ -65,7 +68,31 @@ public class ControlerInterface {
     
     
     
-    public static void main(String args[]) {
+    public void carregarCombo(JComboBox combo){
+        try {
+            List lista = getMyInstance().getGerDominio().listarCidade();
+        } catch (ClassNotFoundException ex) {
+            System.getLogger(ControlerInterface.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (SQLException ex) {
+            System.getLogger(ControlerInterface.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+
+            
+            
+ 
+            
+    public GerenciadorDominio getGerDominio() {
+        return gerDominio;
+    }
+
+    public ControlerInterface getMyInstance() {
+        return myInstance;
+    }
+    
+   
+            
+    public static void main(String args[]) throws ClassNotFoundException, SQLException {
 
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
