@@ -5,11 +5,8 @@
 package dao;
 
 import java.util.List;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import model.Cidade;
+import org.hibernate.Session;
 
 /**
  *
@@ -19,32 +16,15 @@ public class CidadeDAO {
 
     public CidadeDAO() {
     }
-    
+
     /**
      *
      * @return
-     * @throws ClassNotFoundException
-     * @throws SQLException
      */
-    public List<Cidade> listar() throws ClassNotFoundException, SQLException{
-        Statement stmt = ConexaoMySQL.obterConexao().createStatement();
-        List<Cidade> lista = new ArrayList();
-        
-        
-        String sql = "SELECT * FROM Cidade";
-        ResultSet rs = stmt.executeQuery(sql);
-        
-        while(rs.next()){
-            int idCidade = rs.getInt("idCidade"); // entre aspas vai o nome do campo de dados
-            String nomeCidade = rs.getString("nomeCidade");
-            Cidade cid = new Cidade(idCidade, nomeCidade);
-            
-            lista.add(cid);
-            
+    public List<Cidade> listar() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from Cidade", Cidade.class).list();
         }
-        return lista;
-        
-        
     }
-    
+
 }

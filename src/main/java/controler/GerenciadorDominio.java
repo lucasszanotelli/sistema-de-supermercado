@@ -5,7 +5,6 @@
 package controler;
 
 import dao.CidadeDAO;
-import dao.ConexaoMySQL;
 import java.sql.SQLException;
 import java.util.List;
 import model.Cidade;
@@ -16,16 +15,13 @@ import model.Cidade;
  */
 public class GerenciadorDominio {
     private CidadeDAO cidDAO;
-    
-    
-    public GerenciadorDominio() throws ClassNotFoundException, SQLException{
-        ConexaoMySQL.obterConexao();
-        
-        cidDAO = new CidadeDAO();        
+
+    public GerenciadorDominio() throws ClassNotFoundException, SQLException {
+        cidDAO = new CidadeDAO();
     }
-    
-    public List<Cidade> listarCidade() throws ClassNotFoundException, SQLException{
+
+    public List<Cidade> listarCidade() throws ClassNotFoundException, SQLException {
         return cidDAO.listar();
     }
-    
+
 }
