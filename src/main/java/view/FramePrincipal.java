@@ -119,7 +119,7 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_manuCadClienteActionPerformed
 
     private void listagemClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listagemClienteActionPerformed
-        // TODO add your handling code here:
+        controlInterface.abrirDialogPesqCliente();
     }//GEN-LAST:event_listagemClienteActionPerformed
     
 

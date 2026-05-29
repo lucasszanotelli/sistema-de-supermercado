@@ -4,11 +4,18 @@
  */
 package view;
 
+import dao.ClienteDAO;
 import controler.FuncoesUteis;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import javax.swing.ComboBoxModel;
+import javax.swing.JOptionPane;
+import model.Cliente;
 import model.Endereco;
 
 /**
@@ -18,6 +25,9 @@ import model.Endereco;
 public class DialogCadCliente extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogCadCliente.class.getName());
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/uuuu")
+            .withResolverStyle(ResolverStyle.STRICT);
+    private final ClienteDAO clienteDAO = new ClienteDAO();
 
     /**
      * Creates new form DialogCadCliente
@@ -175,10 +185,25 @@ public class DialogCadCliente extends javax.swing.JDialog {
         );
 
         btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLimparActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelCadClienteLayout = new javax.swing.GroupLayout(panelCadCliente);
         panelCadCliente.setLayout(panelCadClienteLayout);
@@ -348,6 +373,94 @@ public class DialogCadCliente extends javax.swing.JDialog {
     private void txtRuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRuaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtRuaActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        String nome = txtNome.getText() == null ? "" : txtNome.getText().trim();
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Informe o nome.");
+            return;
+        }
+
+        String cpf = onlyDigits(txtCPF.getText());
+        if (cpf.length() != 11) {
+            JOptionPane.showMessageDialog(this, "Informe um CPF valido.");
+            return;
+        }
+
+        LocalDate dtNasc = parseDataNascimento(txtDtNasc.getText());
+        if (dtNasc == null) {
+            JOptionPane.showMessageDialog(this, "Informe uma data de nascimento valida.");
+            return;
+        }
+
+        Endereco endereco = new Endereco();
+        endereco.setCep(onlyDigits(txtCEP.getText()));
+        endereco.setRua(txtRua.getText() == null ? "" : txtRua.getText().trim());
+        endereco.setBairro(txtBairro.getText() == null ? "" : txtBairro.getText().trim());
+        endereco.setCidade(getComboValue(cmbCidade));
+        endereco.setUf(getComboValue(cmbUF));
+
+        Cliente cliente = new Cliente();
+        cliente.setNome(nome);
+        cliente.setCpf(cpf);
+        cliente.setDtNasc(dtNasc);
+        cliente.setEndereco(endereco);
+
+        try {
+            clienteDAO.salvar(cliente);
+            JOptionPane.showMessageDialog(this, "Cliente salvo com sucesso.");
+            limparCamposCliente();
+            bloquearEndereco(true);
+        } catch (RuntimeException ex) {
+            logger.log(Level.SEVERE, "Falha ao salvar cliente", ex);
+            JOptionPane.showMessageDialog(this, "Falha ao salvar cliente: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        limparCamposCliente();
+        bloquearEndereco(true);
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void limparCamposCliente() {
+        txtNome.setText("");
+        txtCPF.setValue(null);
+        txtDtNasc.setValue(null);
+        txtCEP.setValue(null);
+        limparCamposEndereco();
+    }
+
+    private String getComboValue(javax.swing.JComboBox<String> combo) {
+        Object selected = combo.getSelectedItem();
+        if (selected == null) {
+            return "";
+        }
+        String value = selected.toString().trim();
+        if (value.isEmpty() || value.toLowerCase().startsWith("item")) {
+            return "";
+        }
+        return value;
+    }
+
+    private LocalDate parseDataNascimento(String rawValue) {
+        String normalized = rawValue == null ? "" : rawValue.trim();
+        if (onlyDigits(normalized).isEmpty()) {
+            return null;
+        }
+        try {
+            return LocalDate.parse(normalized, DATE_FORMATTER);
+        } catch (DateTimeParseException ex) {
+            return null;
+        }
+    }
+
+    private String onlyDigits(String value) {
+        return value == null ? "" : value.replaceAll("\\D", "");
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -4,6 +4,10 @@
  */
 package view;
 
+import dao.ClienteDAO;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import model.Cliente;
 /**
  *
  * @author lucas
@@ -11,6 +15,7 @@ package view;
 public class DialogPesqCliente extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogPesqCliente.class.getName());
+    private final ClienteDAO clienteDAO = new ClienteDAO();
 
     /**
      * Creates new form DialogPesqCliente
@@ -18,6 +23,8 @@ public class DialogPesqCliente extends javax.swing.JDialog {
     public DialogPesqCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        configurarTabela();
+        carregarTabela(null);
     }
 
     /**
@@ -29,24 +36,112 @@ public class DialogPesqCliente extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txtPesq = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JToggleButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabelaResult = new javax.swing.JTable();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        txtPesq.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPesqActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        tabelaResult.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "id", "Nome", "Cep", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tabelaResult);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txtPesq, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPesq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnBuscar))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtPesqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPesqActionPerformed
+        carregarTabela(txtPesq.getText());
+    }//GEN-LAST:event_txtPesqActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        carregarTabela(txtPesq.getText());
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void configurarTabela() {
+        DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Id", "Nome", "CPF", "CEP" }) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tabelaResult.setModel(model);
+    }
+
+    private void carregarTabela(String filtro) {
+        List<Cliente> clientes = clienteDAO.buscarPorNome(filtro);
+        DefaultTableModel model = (DefaultTableModel) tabelaResult.getModel();
+        model.setRowCount(0);
+        for (Cliente cliente : clientes) {
+            String cep = "";
+            if (cliente.getEndereco() != null && cliente.getEndereco().getCep() != null) {
+                cep = cliente.getEndereco().getCep();
+            }
+            model.addRow(new Object[] {
+                cliente.getIdPessoa(),
+                cliente.getNome(),
+                cliente.getCpf(),
+                cep
+            });
+        }
+    }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton btnBuscar;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tabelaResult;
+    private javax.swing.JTextField txtPesq;
     // End of variables declaration//GEN-END:variables
 }

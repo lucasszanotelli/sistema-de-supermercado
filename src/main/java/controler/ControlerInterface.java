@@ -15,6 +15,7 @@ import dao.HibernateUtil;
 import view.DialogCadCliente;
 import view.DialogCadFornecedor;
 import view.DialogCadProduto;
+import view.DialogPesqCliente;
 import view.FramePrincipal;
 
 /**
@@ -27,6 +28,7 @@ public class ControlerInterface {
     DialogCadProduto dlgCadProduto = null;
     DialogCadFornecedor dlgCadFornecedor = null;
     DialogCadCliente dlgCadCliente = null;
+    DialogPesqCliente dlgPescCliente = null;
     
     GerenciadorDominio gerDominio;
 
@@ -69,6 +71,9 @@ public class ControlerInterface {
     }
     public void abrirDialogCadCliente(){
         abrirJanela(framePrincipal, dlgCadCliente, DialogCadCliente.class);           
+    }
+    public void abrirDialogPesqCliente(){
+        abrirJanela(framePrincipal, dlgPescCliente, DialogPesqCliente.class);
     }
     
     

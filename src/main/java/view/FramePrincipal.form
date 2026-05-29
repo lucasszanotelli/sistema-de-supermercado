@@ -64,7 +64,6 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="listagemCliente">
               <Properties>
-                <Property name="actionCommand" type="java.lang.String" value=""/>
                 <Property name="label" type="java.lang.String" value="Cliente"/>
               </Properties>
               <Events>
