@@ -12,18 +12,18 @@ import java.sql.SQLException;
  *
  * @author 2024122760121
  */
-public class ConexaoMySQL {
+public class ConexaoPostgres {
     static Connection conexao;
     
     public static Connection obterConexao() throws ClassNotFoundException, SQLException{
         //VARIÁVEIS DE AMBIENTE DO BANCO DE DADOS
-        String login = "root";
-        String senha = "";
-        String ip = "127.0.0.1:3306";
+        String login = "postgres";
+        String senha = "postgres";
+        String ip = "127.0.0.1:5432";
         String nomeBD = "gerenciaSupermercado";
-        String url = "jdbc:mysql://" + ip + "/" + nomeBD;
+        String url = "jdbc:postgresql://" + ip + "/" + nomeBD;
         
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("org.postgresql.Driver");
         
         conexao = DriverManager.getConnection(url, login, senha);
         return conexao;        

@@ -4,6 +4,13 @@
  */
 package view;
 
+import controler.FuncoesUteis;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import javax.swing.ComboBoxModel;
+import model.Endereco;
+
 /**
  *
  * @author 2024122760121
@@ -18,6 +25,13 @@ public class DialogCadFornecedor extends javax.swing.JDialog {
     public DialogCadFornecedor(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        bloquearEndereco(true);
+        txtCEP.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                buscarEnderecoPorCep();
+            }
+        });
     }
 
     /**
@@ -256,8 +270,99 @@ public class DialogCadFornecedor extends javax.swing.JDialog {
     }//GEN-LAST:event_txtEmailActionPerformed
 
     private void txtCEPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCEPActionPerformed
-        // TODO add your handling code here:
+        buscarEnderecoPorCep();
     }//GEN-LAST:event_txtCEPActionPerformed
+
+    private void bloquearEndereco(boolean bloqueado) {
+        txtRua.setEnabled(!bloqueado);
+        txtBairro.setEnabled(!bloqueado);
+        txtCidade.setEnabled(!bloqueado);
+        cbUF.setEnabled(!bloqueado);
+    }
+
+    private void limparCamposEndereco() {
+        txtRua.setText("");
+        txtBairro.setText("");
+        txtCidade.setText("");
+        cbUF.setSelectedItem(null);
+    }
+
+    private void preencherCamposEndereco(Endereco endereco) {
+        txtRua.setText(endereco.getRua() == null ? "" : endereco.getRua());
+        txtBairro.setText(endereco.getBairro() == null ? "" : endereco.getBairro());
+        txtCidade.setText(endereco.getCidade() == null ? "" : endereco.getCidade());
+        setComboValue(cbUF, endereco.getUf());
+    }
+
+    private void setComboValue(javax.swing.JComboBox<String> combo, String value) {
+        if (value == null || value.trim().isEmpty()) {
+            combo.setSelectedItem(null);
+            return;
+        }
+
+        String normalized = value.trim();
+        ComboBoxModel<String> model = combo.getModel();
+        for (int i = 0; i < model.getSize(); i++) {
+            String item = model.getElementAt(i);
+            if (item != null && item.equalsIgnoreCase(normalized)) {
+                combo.setSelectedItem(item);
+                return;
+            }
+        }
+
+        combo.addItem(normalized);
+        combo.setSelectedItem(normalized);
+    }
+
+    private void buscarEnderecoPorCep() {
+        final String cepLimpo = txtCEP.getText() == null
+                ? ""
+                : txtCEP.getText().replaceAll("\\D", "");
+        if (cepLimpo.length() != 8) {
+            limparCamposEndereco();
+            bloquearEndereco(true);
+            return;
+        }
+
+        bloquearEndereco(true);
+
+        javax.swing.SwingWorker<Endereco, Void> worker = new javax.swing.SwingWorker<>() {
+            @Override
+            protected Endereco doInBackground() {
+                try {
+                    return FuncoesUteis.consultaCep(cepLimpo);
+                } catch (IOException ex) {
+                    logger.log(Level.WARNING, "Falha ao consultar CEP: " + cepLimpo, ex);
+                    return null;
+                }
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    Endereco endereco = get();
+                    if (endereco == null) {
+                        limparCamposEndereco();
+                        bloquearEndereco(false);
+                        return;
+                    }
+                    preencherCamposEndereco(endereco);
+                    bloquearEndereco(true);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    logger.log(Level.WARNING, "Consulta de CEP interrompida: " + cepLimpo, ex);
+                    limparCamposEndereco();
+                    bloquearEndereco(false);
+                } catch (ExecutionException ex) {
+                    logger.log(Level.WARNING, "Falha ao processar consulta de CEP: " + cepLimpo, ex);
+                    limparCamposEndereco();
+                    bloquearEndereco(false);
+                }
+            }
+        };
+
+        worker.execute();
+    }
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         // TODO add your handling code here:

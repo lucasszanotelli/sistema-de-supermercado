@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import dao.HibernateUtil;
 import view.DialogCadCliente;
 import view.DialogCadFornecedor;
 import view.DialogCadProduto;
@@ -21,19 +22,24 @@ import view.FramePrincipal;
  * @author 2024122760121
  */
 public class ControlerInterface {
+    private static ControlerInterface instance;
     FramePrincipal framePrincipal = null;
     DialogCadProduto dlgCadProduto = null;
     DialogCadFornecedor dlgCadFornecedor = null;
     DialogCadCliente dlgCadCliente = null;
     
     GerenciadorDominio gerDominio;
-    
-    private ControlerInterface myInstance = new ControlerInterface();
-    
-    
+
     
     private ControlerInterface() throws ClassNotFoundException, SQLException{
         gerDominio = new GerenciadorDominio();
+    }
+
+    public static synchronized ControlerInterface getInstance() throws ClassNotFoundException, SQLException {
+        if (instance == null) {
+            instance = new ControlerInterface();
+        }
+        return instance;
     }
        
         // ABRIR JDIALOG
@@ -70,7 +76,7 @@ public class ControlerInterface {
     
     public void carregarCombo(JComboBox combo){
         try {
-            List lista = getMyInstance().getGerDominio().listarCidade();
+            List lista = getGerDominio().listarCidade();
         } catch (ClassNotFoundException ex) {
             System.getLogger(ControlerInterface.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         } catch (SQLException ex) {
@@ -86,10 +92,6 @@ public class ControlerInterface {
         return gerDominio;
     }
 
-    public ControlerInterface getMyInstance() {
-        return myInstance;
-    }
-    
    
             
     public static void main(String args[]) throws ClassNotFoundException, SQLException {
@@ -103,7 +105,7 @@ public class ControlerInterface {
             }
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
         }
-        ControlerInterface controlerInterface = new ControlerInterface();
-        controlerInterface.abrirFramePrincipal();
+        HibernateUtil.getSessionFactory();
+        ControlerInterface.getInstance().abrirFramePrincipal();
     }
 }

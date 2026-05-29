@@ -28,6 +28,8 @@ public class FramePrincipal extends javax.swing.JFrame {
         menuSaida = new javax.swing.JMenuItem();
         menuRelatorio = new javax.swing.JMenu();
         menuListagem = new javax.swing.JMenu();
+        listagemCliente = new javax.swing.JMenuItem();
+        listagemProduto = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,6 +75,19 @@ public class FramePrincipal extends javax.swing.JFrame {
         menuBar1.add(menuRelatorio);
 
         menuListagem.setText("Listagem");
+
+        listagemCliente.setActionCommand("");
+        listagemCliente.setLabel("Cliente");
+        listagemCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listagemClienteActionPerformed(evt);
+            }
+        });
+        menuListagem.add(listagemCliente);
+
+        listagemProduto.setText("Produto");
+        menuListagem.add(listagemProduto);
+
         menuBar1.add(menuListagem);
 
         setJMenuBar(menuBar1);
@@ -102,9 +117,15 @@ public class FramePrincipal extends javax.swing.JFrame {
     private void manuCadClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manuCadClienteActionPerformed
         controlInterface.abrirDialogCadCliente();
     }//GEN-LAST:event_manuCadClienteActionPerformed
+
+    private void listagemClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listagemClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_listagemClienteActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem listagemCliente;
+    private javax.swing.JMenuItem listagemProduto;
     private javax.swing.JMenuItem manuCadCliente;
     private javax.swing.JMenuBar menuBar1;
     private javax.swing.JMenuItem menuCadFornecedores;
