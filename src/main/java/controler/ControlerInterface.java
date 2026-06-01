@@ -29,6 +29,7 @@ public class ControlerInterface {
     DialogCadFornecedor dlgCadFornecedor = null;
     DialogCadCliente dlgCadCliente = null;
     DialogPesq dlgPescCliente = null;
+    DialogCadProduto dlcCadProduto = null;
     
     GerenciadorDominio gerDominio;
 
@@ -75,9 +76,6 @@ public class ControlerInterface {
     public void abrirDialogPesqCliente(){
         abrirJanela(framePrincipal, dlgPescCliente, DialogPesq.class);
     }
-    
-    
-    
     
     public void carregarCombo(JComboBox combo){
         try {

@@ -51,12 +51,11 @@ public class DialogCadProduto extends javax.swing.JDialog {
         btnCancelar = new javax.swing.JButton();
         labelQtd = new javax.swing.JLabel();
         spinnerQtd = new javax.swing.JSpinner();
+        txtCategoria = new javax.swing.JTextField();
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        panelIdProduto.setBorder(javax.swing.BorderFactory.createTitledBorder("Identificação Produto"));
 
         labelCodProduto.setText("Cód. Produto");
 
@@ -66,7 +65,7 @@ public class DialogCadProduto extends javax.swing.JDialog {
 
         cbCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Valores R$"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Valores"));
 
         labelValCompra.setText("Valor Compra R$");
 
@@ -134,6 +133,12 @@ public class DialogCadProduto extends javax.swing.JDialog {
         spinnerQtd.setName(""); // NOI18N
         spinnerQtd.setRequestFocusEnabled(false);
 
+        txtCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCategoriaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelIdProdutoLayout = new javax.swing.GroupLayout(panelIdProduto);
         panelIdProduto.setLayout(panelIdProdutoLayout);
         panelIdProdutoLayout.setHorizontalGroup(
@@ -150,9 +155,14 @@ public class DialogCadProduto extends javax.swing.JDialog {
                 .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelIdProdutoLayout.createSequentialGroup()
                         .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelCategoria))
-                        .addGap(54, 54, 54)
+                            .addGroup(panelIdProdutoLayout.createSequentialGroup()
+                                .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(labelCategoria))
+                                .addGap(54, 54, 54))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIdProdutoLayout.createSequentialGroup()
+                                .addComponent(txtCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)))
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(17, 17, 17))
                     .addGroup(panelIdProdutoLayout.createSequentialGroup()
@@ -161,7 +171,7 @@ public class DialogCadProduto extends javax.swing.JDialog {
                                 .addComponent(labelCodProduto)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelIdProdutoLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGap(0, 10, Short.MAX_VALUE)
                                 .addComponent(txtCodProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(37, 37, 37)
                         .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,7 +204,9 @@ public class DialogCadProduto extends javax.swing.JDialog {
                     .addGroup(panelIdProdutoLayout.createSequentialGroup()
                         .addComponent(labelCategoria)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(8, 8, 8)
                 .addComponent(labelFornecedor)
@@ -203,7 +215,7 @@ public class DialogCadProduto extends javax.swing.JDialog {
                     .addComponent(cmbFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelQtd)
                     .addComponent(spinnerQtd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                 .addGroup(panelIdProdutoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnLimpar)
@@ -231,17 +243,21 @@ public class DialogCadProduto extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnLimparActionPerformed
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnCancelarActionPerformed
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void txtCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCategoriaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -262,6 +278,7 @@ public class DialogCadProduto extends javax.swing.JDialog {
     private javax.swing.JLabel labelValVenda;
     private javax.swing.JPanel panelIdProduto;
     private javax.swing.JSpinner spinnerQtd;
+    private javax.swing.JTextField txtCategoria;
     private javax.swing.JTextField txtCodProduto;
     private javax.swing.JTextField txtNomeproduto;
     private javax.swing.JTextField txtValCompra;
