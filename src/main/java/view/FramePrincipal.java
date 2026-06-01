@@ -23,10 +23,10 @@ public class FramePrincipal extends javax.swing.JFrame {
         menuCadProduto = new javax.swing.JMenuItem();
         menuCadFornecedores = new javax.swing.JMenuItem();
         manuCadCliente = new javax.swing.JMenuItem();
+        menuRelatorio = new javax.swing.JMenu();
         menuEstoque = new javax.swing.JMenu();
         menuEntrada = new javax.swing.JMenuItem();
         menuSaida = new javax.swing.JMenuItem();
-        menuRelatorio = new javax.swing.JMenu();
         menuListagem = new javax.swing.JMenu();
         listagemCliente = new javax.swing.JMenuItem();
         listagemProduto = new javax.swing.JMenuItem();
@@ -61,6 +61,8 @@ public class FramePrincipal extends javax.swing.JFrame {
 
         menuBar1.add(menuCadastro);
 
+        menuRelatorio.setText("Relatórios");
+
         menuEstoque.setText("Venda");
 
         menuEntrada.setText("Entrada");
@@ -69,14 +71,12 @@ public class FramePrincipal extends javax.swing.JFrame {
         menuSaida.setText("Saída");
         menuEstoque.add(menuSaida);
 
-        menuBar1.add(menuEstoque);
+        menuRelatorio.add(menuEstoque);
 
-        menuRelatorio.setText("Relatórios");
         menuBar1.add(menuRelatorio);
 
         menuListagem.setText("Listagem");
 
-        listagemCliente.setActionCommand("");
         listagemCliente.setLabel("Cliente");
         listagemCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -100,7 +100,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGap(0, 278, Short.MAX_VALUE)
         );
 
         pack();

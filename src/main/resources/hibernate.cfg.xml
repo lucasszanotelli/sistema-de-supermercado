@@ -18,6 +18,7 @@
         <mapping class="model.Endereco"/>
         <mapping class="model.Pessoa"/>
         <mapping class="model.Cliente"/>
+        <mapping class="model.Fornecedor"/>
         <mapping class="model.Funcionario"/>
     </session-factory>
 </hibernate-configuration>

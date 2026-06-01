@@ -5,10 +5,13 @@
 package view;
 
 import controler.FuncoesUteis;
+import dao.FornecedorDAO;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import javax.swing.ComboBoxModel;
+import javax.swing.JOptionPane;
+import model.Fornecedor;
 import model.Endereco;
 
 /**
@@ -18,6 +21,7 @@ import model.Endereco;
 public class DialogCadFornecedor extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogCadFornecedor.class.getName());
+    private final FornecedorDAO fornecedorDAO = new FornecedorDAO();
 
     /**
      * Creates new form DialogCadFornecedor
@@ -148,6 +152,11 @@ public class DialogCadFornecedor extends javax.swing.JDialog {
         cbUF.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         btnLimpar.setText("Limpar");
         btnLimpar.addActionListener(new java.awt.event.ActionListener() {
@@ -365,12 +374,76 @@ public class DialogCadFornecedor extends javax.swing.JDialog {
     }
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        // TODO add your handling code here:
+        limparCamposFornecedor();
+        bloquearEndereco(true);
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        String nome = txtNomeFornecedor.getText() == null ? "" : txtNomeFornecedor.getText().trim();
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Informe o nome.");
+            return;
+        }
+
+        String cnpj = onlyDigits(txtCNPJ.getText());
+        if (cnpj.length() != 14) {
+            JOptionPane.showMessageDialog(this, "Informe um CNPJ valido.");
+            return;
+        }
+
+        Endereco endereco = new Endereco();
+        endereco.setCep(onlyDigits(txtCEP.getText()));
+        endereco.setRua(txtRua.getText() == null ? "" : txtRua.getText().trim());
+        endereco.setBairro(txtBairro.getText() == null ? "" : txtBairro.getText().trim());
+        endereco.setCidade(txtCidade.getText() == null ? "" : txtCidade.getText().trim());
+        endereco.setUf(getComboValue(cbUF));
+
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setNome(nome);
+        fornecedor.setTelefone(onlyDigits(txtTelefone.getText()));
+        fornecedor.setCnpj(cnpj);
+        fornecedor.setEmail(txtEmail.getText() == null ? "" : txtEmail.getText().trim());
+        fornecedor.setEndereco(endereco);
+
+        try {
+            fornecedorDAO.salvar(fornecedor);
+            JOptionPane.showMessageDialog(this, "Fornecedor salvo com sucesso.");
+            limparCamposFornecedor();
+            bloquearEndereco(true);
+        } catch (RuntimeException ex) {
+            logger.log(Level.SEVERE, "Falha ao salvar fornecedor", ex);
+            JOptionPane.showMessageDialog(this, "Falha ao salvar fornecedor: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void limparCamposFornecedor() {
+        txtNomeFornecedor.setText("");
+        txtCNPJ.setValue(null);
+        txtTelefone.setValue(null);
+        txtEmail.setText("");
+        txtCEP.setValue(null);
+        limparCamposEndereco();
+    }
+
+    private String getComboValue(javax.swing.JComboBox<String> combo) {
+        Object selected = combo.getSelectedItem();
+        if (selected == null) {
+            return "";
+        }
+        String value = selected.toString().trim();
+        if (value.isEmpty() || value.toLowerCase().startsWith("item")) {
+            return "";
+        }
+        return value;
+    }
+
+    private String onlyDigits(String value) {
+        return value == null ? "" : value.replaceAll("\\D", "");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

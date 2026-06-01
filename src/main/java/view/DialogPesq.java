@@ -5,24 +5,28 @@
 package view;
 
 import dao.ClienteDAO;
+import dao.FornecedorDAO;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import model.Cliente;
+import model.Fornecedor;
 /**
  *
  * @author lucas
  */
-public class DialogPesqCliente extends javax.swing.JDialog {
+public class DialogPesq extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogPesqCliente.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogPesq.class.getName());
     private final ClienteDAO clienteDAO = new ClienteDAO();
+    private final FornecedorDAO fornecedorDAO = new FornecedorDAO();
 
     /**
      * Creates new form DialogPesqCliente
      */
-    public DialogPesqCliente(java.awt.Frame parent, boolean modal) {
+    public DialogPesq(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
         configurarTabela();
         carregarTabela(null);
     }
@@ -36,12 +40,20 @@ public class DialogPesqCliente extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        cmbTipo = new javax.swing.JComboBox();
         txtPesq = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaResult = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cliente", "Fornecedor" }));
+        cmbTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbTipoActionPerformed(evt);
+            }
+        });
 
         txtPesq.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -50,11 +62,6 @@ public class DialogPesqCliente extends javax.swing.JDialog {
         });
 
         btnBuscar.setText("Buscar");
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
 
         tabelaResult.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -64,7 +71,7 @@ public class DialogPesqCliente extends javax.swing.JDialog {
                 {null, null, null, null}
             },
             new String [] {
-                "id", "Nome", "Cep", "Title 4"
+                "id", "Nome", "CPF", "Contato"
             }
         ));
         jScrollPane1.setViewportView(tabelaResult);
@@ -77,6 +84,8 @@ public class DialogPesqCliente extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
+                        .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtPesq, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnBuscar))
@@ -90,6 +99,7 @@ public class DialogPesqCliente extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtPesq, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscar))
                 .addGap(18, 18, 18)
@@ -108,8 +118,16 @@ public class DialogPesqCliente extends javax.swing.JDialog {
         carregarTabela(txtPesq.getText());
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    private void cmbTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipoActionPerformed
+        configurarTabela();
+        carregarTabela(txtPesq.getText());
+    }//GEN-LAST:event_cmbTipoActionPerformed
+
     private void configurarTabela() {
-        DefaultTableModel model = new DefaultTableModel(new Object[][] {}, new String[] { "Id", "Nome", "CPF", "CEP" }) {
+        String[] colunas = isFornecedorSelecionado()
+                ? new String[] { "Id", "Nome", "CNPJ", "Contato" }
+                : new String[] { "Id", "Nome", "CPF", "Contato" };
+        DefaultTableModel model = new DefaultTableModel(new Object[][] {}, colunas) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -119,27 +137,43 @@ public class DialogPesqCliente extends javax.swing.JDialog {
     }
 
     private void carregarTabela(String filtro) {
-        List<Cliente> clientes = clienteDAO.buscarPorNome(filtro);
         DefaultTableModel model = (DefaultTableModel) tabelaResult.getModel();
         model.setRowCount(0);
-        for (Cliente cliente : clientes) {
-            String cep = "";
-            if (cliente.getEndereco() != null && cliente.getEndereco().getCep() != null) {
-                cep = cliente.getEndereco().getCep();
+        if (isFornecedorSelecionado()) {
+            List<Fornecedor> fornecedores = fornecedorDAO.buscarPorNome(filtro);
+            for (Fornecedor fornecedor : fornecedores) {
+               
+                model.addRow(new Object[] {
+                    fornecedor.getIdPessoa(),
+                    fornecedor.getNome(),
+                    fornecedor.getCnpj(),
+                    fornecedor.getTelefone()
+                });
             }
+            return;
+        }
+
+        List<Cliente> clientes = clienteDAO.buscarPorNome(filtro);
+        for (Cliente cliente : clientes) {
             model.addRow(new Object[] {
                 cliente.getIdPessoa(),
                 cliente.getNome(),
                 cliente.getCpf(),
-                cep
+                cliente.getTelefone()
             });
         }
+    }
+
+    private boolean isFornecedorSelecionado() {
+        Object selected = cmbTipo.getSelectedItem();
+        return selected != null && "Fornecedor".equalsIgnoreCase(selected.toString());
     }
 
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnBuscar;
+    private javax.swing.JComboBox cmbTipo;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabelaResult;
     private javax.swing.JTextField txtPesq;
