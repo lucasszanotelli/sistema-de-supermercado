@@ -4,6 +4,17 @@
  */
 package view;
 
+import dao.CategoriaDAO;
+import dao.FornecedorDAO;
+import dao.ProdutoDAO;
+import java.util.List;
+import java.util.logging.Level;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import model.Categoria;
+import model.Fornecedor;
+import model.Produto;
+
 /**
  *
  * @author 2024122760121
@@ -12,6 +23,10 @@ public class DialogCadProduto extends javax.swing.JDialog {
     
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogCadProduto.class.getName());
+    private static final String CATEGORIA_OUTRO = "Outro";
+    private final CategoriaDAO categoriaDAO = new CategoriaDAO();
+    private final ProdutoDAO produtoDAO = new ProdutoDAO();
+    private final FornecedorDAO fornecedorDAO = new FornecedorDAO();
 
     /**
      * Creates new form DialogVend
@@ -19,6 +34,14 @@ public class DialogCadProduto extends javax.swing.JDialog {
     public DialogCadProduto(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        txtCategoria.setEnabled(false);
+        cbCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atualizarCampoCategoria();
+            }
+        });
+        carregarCategorias();
+        carregarFornecedores();
     }
 
     /**
@@ -104,7 +127,7 @@ public class DialogCadProduto extends javax.swing.JDialog {
 
         labelFornecedor.setText("Fornecedor");
 
-        cmbFornecedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbFornecedor.setModel(new javax.swing.DefaultComboBoxModel<>());
 
         btnLimpar.setText("Limpar");
         btnLimpar.addActionListener(new java.awt.event.ActionListener() {
@@ -244,20 +267,196 @@ public class DialogCadProduto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        // TODO add your handling code here:
+        String nome = txtNomeproduto.getText() == null ? "" : txtNomeproduto.getText().trim();
+        if (nome.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Informe o nome do produto.");
+            return;
+        }
+
+        String categoriaNome = obterNomeCategoriaSelecionada();
+        if (categoriaNome.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Informe a categoria.");
+            return;
+        }
+
+        Double preco = parseDecimal(txtValVenda.getText());
+        if (preco == null || preco < 0) {
+            JOptionPane.showMessageDialog(this, "Informe um valor de venda valido.");
+            return;
+        }
+
+        int quantidade = obterQuantidade();
+        if (quantidade < 0) {
+            JOptionPane.showMessageDialog(this, "Informe uma quantidade valida.");
+            return;
+        }
+
+        Fornecedor fornecedor = (Fornecedor) cmbFornecedor.getSelectedItem();
+        if (fornecedor == null) {
+            JOptionPane.showMessageDialog(this, "Informe o fornecedor.");
+            return;
+        }
+
+        Categoria categoria = categoriaDAO.buscarPorNomeExato(categoriaNome);
+        if (categoria == null) {
+            categoria = new Categoria();
+            categoria.setNomeCategoria(categoriaNome);
+            categoria.setDescricao("");
+        }
+
+        Produto produto = new Produto();
+        produto.setNomeProduto(nome);
+        produto.setPreco(preco);
+        produto.setQtdEstoque(quantidade);
+        produto.setCat(categoria);
+        produto.setFornecedor(fornecedor);
+
+        try {
+            produtoDAO.salvar(produto);
+            JOptionPane.showMessageDialog(this, "Produto salvo com sucesso.");
+            limparCamposProduto();
+        } catch (RuntimeException ex) {
+            logger.log(Level.SEVERE, "Falha ao salvar produto", ex);
+            JOptionPane.showMessageDialog(this, "Falha ao salvar produto: " + ex.getMessage());
+        }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
-        // TODO add your handling code here:
+        limparCamposProduto();
     }//GEN-LAST:event_btnLimparActionPerformed
 
     private void txtCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCategoriaActionPerformed
-        // TODO add your handling code here:
+        // Sem acao.
     }//GEN-LAST:event_txtCategoriaActionPerformed
+
+    private void carregarCategorias() {
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+        boolean outroJaExiste = false;
+
+        try {
+            List<Categoria> categorias = categoriaDAO.listar();
+            for (Categoria categoria : categorias) {
+                String nome = categoria.getNomeCategoria();
+                if (nome == null) {
+                    continue;
+                }
+                String normalizado = nome.trim();
+                if (normalizado.isEmpty()) {
+                    continue;
+                }
+                if (normalizado.equalsIgnoreCase(CATEGORIA_OUTRO)) {
+                    outroJaExiste = true;
+                }
+                model.addElement(normalizado);
+            }
+        } catch (RuntimeException ex) {
+            logger.log(Level.WARNING, "Falha ao carregar categorias", ex);
+        }
+
+        if (!outroJaExiste) {
+            model.addElement(CATEGORIA_OUTRO);
+        }
+
+        cbCategoria.setModel(model);
+        if (model.getSize() == 1) {
+            cbCategoria.setSelectedItem(CATEGORIA_OUTRO);
+        } else if (model.getSize() > 0) {
+            cbCategoria.setSelectedIndex(0);
+        }
+        atualizarCampoCategoria();
+    }
+
+    private void carregarFornecedores() {
+        DefaultComboBoxModel<Fornecedor> model = new DefaultComboBoxModel<>();
+        try {
+            List<Fornecedor> fornecedores = fornecedorDAO.listar();
+            for (Fornecedor fornecedor : fornecedores) {
+                model.addElement(fornecedor);
+            }
+        } catch (RuntimeException ex) {
+            logger.log(Level.WARNING, "Falha ao carregar fornecedores", ex);
+        }
+
+        cmbFornecedor.setModel(model);
+        if (model.getSize() > 0) {
+            cmbFornecedor.setSelectedIndex(0);
+        }
+    }
+
+    private void atualizarCampoCategoria() {
+        boolean outroSelecionado = isOutroSelecionado();
+        txtCategoria.setEnabled(outroSelecionado);
+        if (!outroSelecionado) {
+            txtCategoria.setText("");
+        }
+    }
+
+    private boolean isOutroSelecionado() {
+        Object selected = cbCategoria.getSelectedItem();
+        if (selected == null) {
+            return false;
+        }
+        String value = selected.toString().trim();
+        return value.equalsIgnoreCase(CATEGORIA_OUTRO);
+    }
+
+    private String obterNomeCategoriaSelecionada() {
+        Object selected = cbCategoria.getSelectedItem();
+        String value = selected == null ? "" : selected.toString().trim();
+        if (value.isEmpty()) {
+            return "";
+        }
+        if (value.equalsIgnoreCase(CATEGORIA_OUTRO)) {
+            String nova = txtCategoria.getText() == null ? "" : txtCategoria.getText().trim();
+            return nova;
+        }
+        return value;
+    }
+
+    private Double parseDecimal(String value) {
+        String text = value == null ? "" : value.trim();
+        if (text.isEmpty()) {
+            return null;
+        }
+        String normalized = text.replace(" ", "");
+        if (normalized.contains(",") && normalized.contains(".")) {
+            normalized = normalized.replace(".", "").replace(",", ".");
+        } else {
+            normalized = normalized.replace(",", ".");
+        }
+        try {
+            return Double.parseDouble(normalized);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+    }
+
+    private int obterQuantidade() {
+        Object value = spinnerQtd.getValue();
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        try {
+            return Integer.parseInt(String.valueOf(value));
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
+    }
+
+    private void limparCamposProduto() {
+        txtCodProduto.setText("");
+        txtNomeproduto.setText("");
+        txtValCompra.setText("");
+        txtValVenda.setText("");
+        txtCategoria.setText("");
+        spinnerQtd.setValue(0);
+        carregarCategorias();
+        carregarFornecedores();
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -265,7 +464,7 @@ public class DialogCadProduto extends javax.swing.JDialog {
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cbCategoria;
-    private javax.swing.JComboBox<String> cmbFornecedor;
+    private javax.swing.JComboBox<Fornecedor> cmbFornecedor;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JSpinner jSpinner1;

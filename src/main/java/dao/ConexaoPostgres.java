@@ -18,7 +18,7 @@ public class ConexaoPostgres {
     public static Connection obterConexao() throws ClassNotFoundException, SQLException{
         //VARIÁVEIS DE AMBIENTE DO BANCO DE DADOS
         String login = "postgres";
-        String senha = "postgre";
+        String senha = "postgres";
         String ip = "127.0.0.1:5432";
         String nomeBD = "gerenciaSupermercado";
         String url = "jdbc:postgresql://" + ip + "/" + nomeBD;

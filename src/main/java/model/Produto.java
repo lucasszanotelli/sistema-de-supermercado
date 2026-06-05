@@ -4,16 +4,46 @@
  */
 package model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author 2024122760121
  */
+@Entity
+@Table(name = "Produto")
 public class Produto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idProduto")
     private int codProduto;
+
+    @Column(name = "nomeProduto")
     private String nomeProduto;
+
+    @Column(name = "preco")
     private double preco;
+
+    @Column(name = "qtdEstoque")
     private int qtdEstoque;
+
+    @ManyToOne
+    @JoinColumn(name = "idCategoria")
     private Categoria cat;
+
+    @ManyToOne
+    @JoinColumn(name = "idFornecedor")
+    private Fornecedor fornecedor;
+
+    public Produto() {
+    }
 
     public Produto(int codProduto, String nomeProduto, double preco, int qtdEstoque, Categoria cat) {
         this.codProduto = codProduto;
@@ -61,6 +91,14 @@ public class Produto {
 
     public void setCat(Categoria cat) {
         this.cat = cat;
+    }
+
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
     }
     
     

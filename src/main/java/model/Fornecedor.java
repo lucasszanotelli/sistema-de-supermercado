@@ -44,4 +44,10 @@ public class Fornecedor extends Pessoa {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        String nome = getNome();
+        return nome == null ? "" : nome;
+    }
 }
