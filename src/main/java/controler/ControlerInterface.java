@@ -8,9 +8,11 @@ import java.awt.Frame;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.List;
+
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+
 import dao.HibernateUtil;
 import view.DialogCadCliente;
 import view.DialogCadFornecedor;
@@ -86,16 +88,10 @@ public class ControlerInterface {
             System.getLogger(ControlerInterface.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }
-
-            
-            
- 
-            
+       
     public GerenciadorDominio getGerDominio() {
         return gerDominio;
     }
-
-   
             
     public static void main(String args[]) throws ClassNotFoundException, SQLException {
 
