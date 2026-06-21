@@ -140,7 +140,7 @@ public class DialogPesq extends javax.swing.JDialog {
         DefaultTableModel model = (DefaultTableModel) tabelaResult.getModel();
         model.setRowCount(0);
         if (isFornecedorSelecionado()) {
-            List<Fornecedor> fornecedores = fornecedorDAO.buscarPorNome(filtro);
+            List<Fornecedor> fornecedores = fornecedorDAO.buscarPorCampo(Fornecedor.class, "nome", filtro);
             for (Fornecedor fornecedor : fornecedores) {
                
                 model.addRow(new Object[] {
@@ -153,7 +153,7 @@ public class DialogPesq extends javax.swing.JDialog {
             return;
         }
 
-        List<Cliente> clientes = clienteDAO.buscarPorNome(filtro);
+        List<Cliente> clientes = clienteDAO.buscarPorCampo(Cliente.class, "nome", filtro);
         for (Cliente cliente : clientes) {
             model.addRow(new Object[] {
                 cliente.getIdPessoa(),

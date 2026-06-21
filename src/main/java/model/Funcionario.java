@@ -46,4 +46,10 @@ public class Funcionario extends Pessoa {
     public void setSalario(BigDecimal salario) {
         this.salario = salario;
     }
+
+    @Override
+    public String toString() {
+        String nome = getNome();
+        return nome == null ? "" : nome;
+    }
 }

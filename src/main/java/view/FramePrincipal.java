@@ -66,6 +66,11 @@ public class FramePrincipal extends javax.swing.JFrame {
         menuEstoque.setText("Venda");
 
         menuEntrada.setText("Entrada");
+        menuEntrada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEntradaActionPerformed(evt);
+            }
+        });
         menuEstoque.add(menuEntrada);
 
         menuSaida.setText("Saída");
@@ -121,6 +126,10 @@ public class FramePrincipal extends javax.swing.JFrame {
     private void listagemClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listagemClienteActionPerformed
         controlInterface.abrirDialogPesqCliente();
     }//GEN-LAST:event_listagemClienteActionPerformed
+
+    private void menuEntradaActionPerformed(java.awt.event.ActionEvent evt) {
+        controlInterface.abrirDialogCadVenda();
+    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

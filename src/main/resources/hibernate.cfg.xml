@@ -22,5 +22,7 @@
         <mapping class="model.Funcionario"/>
         <mapping class="model.Categoria"/>
         <mapping class="model.Produto"/>
+        <mapping class="model.Venda"/>
+        <mapping class="model.ItemVenda"/>
     </session-factory>
 </hibernate-configuration>

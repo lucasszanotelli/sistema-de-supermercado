@@ -14,9 +14,10 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import dao.HibernateUtil;
-import view.DialogCadCliente;
+import view.DialogCadPessoa;
 import view.DialogCadFornecedor;
 import view.DialogCadProduto;
+import view.DialogCadVenda;
 import view.DialogPesq;
 import view.FramePrincipal;
 
@@ -29,7 +30,8 @@ public class ControlerInterface {
     FramePrincipal framePrincipal = null;
     DialogCadProduto dlgCadProduto = null;
     DialogCadFornecedor dlgCadFornecedor = null;
-    DialogCadCliente dlgCadCliente = null;
+    DialogCadPessoa dlgCadCliente = null;
+    DialogCadVenda dlgCadVenda = null;
     DialogPesq dlgPescCliente = null;
     DialogCadProduto dlcCadProduto = null;
     
@@ -67,16 +69,19 @@ public class ControlerInterface {
         framePrincipal.setVisible(true);
     }
     public void abrirDialogCadProduto(){
-        abrirJanela(framePrincipal, dlgCadProduto, DialogCadProduto.class);
+        dlgCadProduto = (DialogCadProduto) abrirJanela(framePrincipal, dlgCadProduto, DialogCadProduto.class);
     }
     public void abrirDialogCadFornecedores(){
-        abrirJanela(framePrincipal, dlgCadFornecedor, DialogCadFornecedor.class);           
+        dlgCadFornecedor = (DialogCadFornecedor) abrirJanela(framePrincipal, dlgCadFornecedor, DialogCadFornecedor.class);
     }
     public void abrirDialogCadCliente(){
-        abrirJanela(framePrincipal, dlgCadCliente, DialogCadCliente.class);           
+        dlgCadCliente = (DialogCadPessoa) abrirJanela(framePrincipal, dlgCadCliente, DialogCadPessoa.class);
     }
     public void abrirDialogPesqCliente(){
-        abrirJanela(framePrincipal, dlgPescCliente, DialogPesq.class);
+        dlgPescCliente = (DialogPesq) abrirJanela(framePrincipal, dlgPescCliente, DialogPesq.class);
+    }
+    public void abrirDialogCadVenda(){
+        dlgCadVenda = (DialogCadVenda) abrirJanela(framePrincipal, dlgCadVenda, DialogCadVenda.class);
     }
     
     public void carregarCombo(JComboBox combo){

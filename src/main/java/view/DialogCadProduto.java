@@ -301,7 +301,7 @@ public class DialogCadProduto extends javax.swing.JDialog {
             return;
         }
 
-        Categoria categoria = categoriaDAO.buscarPorNomeExato(categoriaNome);
+        Categoria categoria = (Categoria) categoriaDAO.buscarPorCampoExato(Categoria.class, "nomeCategoria", categoriaNome);
         if (categoria == null) {
             categoria = new Categoria();
             categoria.setNomeCategoria(categoriaNome);

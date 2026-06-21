@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -7,7 +8,7 @@ import model.Categoria;
 import model.Fornecedor;
 import model.Produto;
 
-public class ProdutoDAO {
+public class ProdutoDAO extends GenericDAO {
 
     public Produto salvar(Produto produto) {
         Transaction transaction = null;
@@ -48,6 +49,12 @@ public class ProdutoDAO {
                 transaction.rollback();
             }
             throw ex;
+        }
+    }
+
+    public List<Produto> listar() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("from Produto p order by p.nomeProduto", Produto.class).list();
         }
     }
 }

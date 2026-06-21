@@ -1,21 +1,22 @@
 package dao;
 
 import java.util.List;
-
+import model.Funcionario;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import model.Categoria;
+public class FuncionarioDAO extends GenericDAO {
 
-public class CategoriaDAO extends GenericDAO {
-
-    public Categoria salvar(Categoria categoria) {
+    public Funcionario salvar(Funcionario funcionario) {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.persist(categoria);
+            if (funcionario.getEndereco() != null) {
+                session.persist(funcionario.getEndereco());
+            }
+            session.persist(funcionario);
             transaction.commit();
-            return categoria;
+            return funcionario;
         } catch (RuntimeException ex) {
             if (transaction != null) {
                 transaction.rollback();
@@ -24,10 +25,9 @@ public class CategoriaDAO extends GenericDAO {
         }
     }
 
-    public List<Categoria> listar() {
+    public List<Funcionario> listar() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("from Categoria c order by c.nomeCategoria", Categoria.class).list();
+            return session.createQuery("from Funcionario f order by f.nome", Funcionario.class).list();
         }
     }
-
 }

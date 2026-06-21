@@ -7,7 +7,7 @@ import org.hibernate.Transaction;
 
 import model.Cliente;
 
-public class ClienteDAO {
+public class ClienteDAO extends GenericDAO {
 
     public Cliente salvar(Cliente cliente) {
         Transaction transaction = null;
@@ -33,18 +33,4 @@ public class ClienteDAO {
         }
     }
 
-    public List<Cliente> buscarPorNome(String filtro) {
-        String termo = filtro == null ? "" : filtro.trim().toLowerCase();
-        if (termo.isEmpty()) {
-            return listar();
-        }
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery(
-                    "from Cliente c where lower(c.nome) like :nome order by c.nome",
-                    Cliente.class)
-                    .setParameter("nome", "%" + termo + "%")
-                    .list();
-        }
-    }
 }

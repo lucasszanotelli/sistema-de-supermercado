@@ -20,4 +20,10 @@ public class Cliente extends Pessoa {
     public Cliente(int idPessoa, String nome, String telefone, String cpf, LocalDate dtNasc, Endereco endereco) {
         super(idPessoa, nome, telefone, cpf, dtNasc, endereco);
     }
+
+    @Override
+    public String toString() {
+        String nome = getNome();
+        return nome == null ? "" : nome;
+    }
 }

@@ -12,7 +12,7 @@ import org.hibernate.Session;
  *
  * @author 2024122760121
  */
-public class CidadeDAO {
+public class CidadeDAO extends GenericDAO {
 
     public CidadeDAO() {
     }

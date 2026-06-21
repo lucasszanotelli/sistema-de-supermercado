@@ -5,7 +5,9 @@
 package view;
 
 import dao.ClienteDAO;
+import dao.FuncionarioDAO;
 import controler.FuncoesUteis;
+import java.math.BigDecimal;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,24 +21,30 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
 import model.Cliente;
 import model.Endereco;
+import model.Funcionario;
 
 /**
  *
  * @author lucas
  */
-public class DialogCadCliente extends javax.swing.JDialog {
+public class DialogCadPessoa extends javax.swing.JDialog {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogCadCliente.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogCadPessoa.class.getName());
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/uuuu")
             .withResolverStyle(ResolverStyle.STRICT);
     private final ClienteDAO clienteDAO = new ClienteDAO();
+    private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
 
     /**
      * Creates new form DialogCadCliente
      */
-    public DialogCadCliente(java.awt.Frame parent, boolean modal) {
+    public DialogCadPessoa(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        configurarSelecaoTipoPessoa();
+        btnSalvar.addActionListener(evt -> btnSalvarActionPerformed(evt));
+        btnLimpar.addActionListener(evt -> btnLimparActionPerformed(evt));
+        btnCancelar.addActionListener(evt -> btnCancelarActionPerformed(evt));
         bloquearEndereco(true);
         txtCEP.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
@@ -44,6 +52,28 @@ public class DialogCadCliente extends javax.swing.JDialog {
                 buscarEnderecoPorCep();
             }
         });
+    }
+
+    private void configurarSelecaoTipoPessoa() {
+        if (!RBCliente.isSelected() && !RBFuncionario.isSelected()) {
+            RBCliente.setSelected(true);
+        }
+        RBCliente.addActionListener(evt -> atualizarCamposFuncionario());
+        RBFuncionario.addActionListener(evt -> atualizarCamposFuncionario());
+        atualizarCamposFuncionario();
+    }
+
+    private void atualizarCamposFuncionario() {
+        boolean funcionario = isFuncionarioSelecionado();
+        labelCargo.setEnabled(funcionario);
+        jLabel1.setEnabled(funcionario);
+        jTextField1.setEnabled(funcionario);
+        jFormattedTextField1.setEnabled(funcionario);
+        panelCadCliente.setBorder(javax.swing.BorderFactory.createTitledBorder(funcionario ? "Cad. Funcionario" : "Cad. Cliente"));
+    }
+
+    private boolean isFuncionarioSelecionado() {
+        return RBFuncionario.isSelected();
     }
 
     /**
@@ -55,6 +85,7 @@ public class DialogCadCliente extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        groupTPessoa = new javax.swing.ButtonGroup();
         panelCadCliente = new javax.swing.JPanel();
         labelNome = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
@@ -62,7 +93,7 @@ public class DialogCadCliente extends javax.swing.JDialog {
         txtCPF = new javax.swing.JFormattedTextField();
         labelDtNasc = new javax.swing.JLabel();
         txtDtNasc = new javax.swing.JFormattedTextField();
-        jPanel2 = new javax.swing.JPanel();
+        panelEndereco = new javax.swing.JPanel();
         labelCEP = new javax.swing.JLabel();
         txtCEP = new javax.swing.JFormattedTextField();
         labelRua = new javax.swing.JLabel();
@@ -79,6 +110,14 @@ public class DialogCadCliente extends javax.swing.JDialog {
         panelContato = new javax.swing.JPanel();
         labelTel = new javax.swing.JLabel();
         txtTelefone = new javax.swing.JFormattedTextField();
+        jPanel1 = new javax.swing.JPanel();
+        RBCliente = new javax.swing.JRadioButton();
+        RBFuncionario = new javax.swing.JRadioButton();
+        jPanel3 = new javax.swing.JPanel();
+        labelCargo = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jFormattedTextField1 = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -102,7 +141,7 @@ public class DialogCadCliente extends javax.swing.JDialog {
             ex.printStackTrace();
         }
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Endereço"));
+        panelEndereco.setBorder(javax.swing.BorderFactory.createTitledBorder("Endereço"));
 
         labelCEP.setText("CEP:");
 
@@ -136,79 +175,64 @@ public class DialogCadCliente extends javax.swing.JDialog {
 
         cmbCidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout panelEnderecoLayout = new javax.swing.GroupLayout(panelEndereco);
+        panelEndereco.setLayout(panelEnderecoLayout);
+        panelEnderecoLayout.setHorizontalGroup(
+            panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEnderecoLayout.createSequentialGroup()
+                .addGroup(panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelEnderecoLayout.createSequentialGroup()
                         .addComponent(labelCEP)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtCEP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(panelEnderecoLayout.createSequentialGroup()
+                        .addGroup(panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(panelEnderecoLayout.createSequentialGroup()
                                 .addComponent(labelUF)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(cmbUF, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(panelEnderecoLayout.createSequentialGroup()
                                 .addComponent(labelRua)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtRua, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(labelBairro)
                             .addComponent(labelCidade))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtBairro)
                             .addComponent(cmbCidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(6, 6, 6))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        panelEnderecoLayout.setVerticalGroup(
+            panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEnderecoLayout.createSequentialGroup()
+                .addGroup(panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelCEP)
                     .addComponent(txtCEP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(labelRua)
                     .addComponent(txtRua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(labelBairro)
                     .addComponent(txtBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(labelUF)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cmbUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(labelCidade)
                         .addComponent(cmbCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 23, Short.MAX_VALUE))
+                .addGap(0, 24, Short.MAX_VALUE))
         );
 
         btnSalvar.setText("Salvar");
-        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalvarActionPerformed(evt);
-            }
-        });
 
         btnLimpar.setText("Limpar");
-        btnLimpar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimparActionPerformed(evt);
-            }
-        });
 
         btnCancelar.setText("Cancelar");
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
 
         panelContato.setBorder(javax.swing.BorderFactory.createTitledBorder("Contatos"));
 
@@ -227,8 +251,8 @@ public class DialogCadCliente extends javax.swing.JDialog {
             .addGroup(panelContatoLayout.createSequentialGroup()
                 .addComponent(labelTel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtTelefone, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
-                .addGap(211, 211, 211))
+                .addComponent(txtTelefone, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelContatoLayout.setVerticalGroup(
             panelContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,6 +264,77 @@ public class DialogCadCliente extends javax.swing.JDialog {
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipo Pessoa"));
+
+        groupTPessoa.add(RBCliente);
+        RBCliente.setText("Cliente");
+        RBCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RBClienteActionPerformed(evt);
+            }
+        });
+
+        groupTPessoa.add(RBFuncionario);
+        RBFuncionario.setText("Funcionário");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(RBCliente)
+                .addGap(18, 18, 18)
+                .addComponent(RBFuncionario)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(RBCliente)
+                    .addComponent(RBFuncionario))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Para Funcionário"));
+
+        labelCargo.setText("Cargo");
+
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Salário R$");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(labelCargo)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 25, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelCargo)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout panelCadClienteLayout = new javax.swing.GroupLayout(panelCadCliente);
         panelCadCliente.setLayout(panelCadClienteLayout);
         panelCadClienteLayout.setHorizontalGroup(
@@ -247,7 +342,7 @@ public class DialogCadCliente extends javax.swing.JDialog {
             .addGroup(panelCadClienteLayout.createSequentialGroup()
                 .addGroup(panelCadClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelCadClienteLayout.createSequentialGroup()
-                        .addGroup(panelCadClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelCadClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(panelCadClienteLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(panelCadClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -268,13 +363,21 @@ public class DialogCadCliente extends javax.swing.JDialog {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnLimpar)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnCancelar)))
+                                .addComponent(btnCancelar))
+                            .addGroup(panelCadClienteLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(panelContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(panelCadClienteLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(panelContato, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(panelEndereco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(panelCadClienteLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelCadClienteLayout.setVerticalGroup(
             panelCadClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -291,10 +394,14 @@ public class DialogCadCliente extends javax.swing.JDialog {
                         .addComponent(labelDtNasc)
                         .addComponent(txtDtNasc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(panelContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelCadClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panelContato, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(panelEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelCadClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnLimpar)
@@ -415,6 +522,14 @@ public class DialogCadCliente extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtRuaActionPerformed
 
+    private void RBClienteActionPerformed(java.awt.event.ActionEvent evt) {
+        atualizarCamposFuncionario();
+    }
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
+        // Campo de cargo.
+    }
+
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         String nome = txtNome.getText() == null ? "" : txtNome.getText().trim();
         String cpf = onlyDigits(txtCPF.getText());
@@ -425,8 +540,19 @@ public class DialogCadCliente extends javax.swing.JDialog {
         String bairro = txtBairro.getText() == null ? "" : txtBairro.getText().trim();
         String cidade = getComboValue(cmbCidade);
         String uf = getComboValue(cmbUF);
+        boolean funcionarioSelecionado = isFuncionarioSelecionado();
+        String cargo = jTextField1.getText() == null ? "" : jTextField1.getText().trim();
+        BigDecimal salario = funcionarioSelecionado ? parseBigDecimal(jFormattedTextField1.getText()) : null;
 
         List<String> erros = validarCamposCliente(nome, cpf, telefone, dtNasc, cep, rua, bairro, cidade, uf);
+        if (funcionarioSelecionado) {
+            if (cargo.isEmpty()) {
+                erros.add("Informe o cargo.");
+            }
+            if (salario == null || salario.compareTo(BigDecimal.ZERO) < 0) {
+                erros.add("Informe um salario valido.");
+            }
+        }
         if (!erros.isEmpty()) {
             JOptionPane.showMessageDialog(this, String.join("\n", erros));
             return;
@@ -439,21 +565,33 @@ public class DialogCadCliente extends javax.swing.JDialog {
         endereco.setCidade(cidade);
         endereco.setUf(uf);
 
-        Cliente cliente = new Cliente();
-        cliente.setNome(nome);
-        cliente.setTelefone(telefone);
-        cliente.setCpf(cpf);
-        cliente.setDtNasc(dtNasc);
-        cliente.setEndereco(endereco);
-
         try {
-            clienteDAO.salvar(cliente);
-            JOptionPane.showMessageDialog(this, "Cliente salvo com sucesso.");
+            if (funcionarioSelecionado) {
+                Funcionario funcionario = new Funcionario();
+                funcionario.setNome(nome);
+                funcionario.setTelefone(telefone);
+                funcionario.setCpf(cpf);
+                funcionario.setDtNasc(dtNasc);
+                funcionario.setEndereco(endereco);
+                funcionario.setCargo(cargo);
+                funcionario.setSalario(salario);
+                funcionarioDAO.salvar(funcionario);
+                JOptionPane.showMessageDialog(this, "Funcionario salvo com sucesso.");
+            } else {
+                Cliente cliente = new Cliente();
+                cliente.setNome(nome);
+                cliente.setTelefone(telefone);
+                cliente.setCpf(cpf);
+                cliente.setDtNasc(dtNasc);
+                cliente.setEndereco(endereco);
+                clienteDAO.salvar(cliente);
+                JOptionPane.showMessageDialog(this, "Cliente salvo com sucesso.");
+            }
             limparCamposCliente();
             bloquearEndereco(true);
         } catch (RuntimeException ex) {
-            logger.log(Level.SEVERE, "Falha ao salvar cliente", ex);
-            JOptionPane.showMessageDialog(this, "Falha ao salvar cliente: " + ex.getMessage());
+            logger.log(Level.SEVERE, "Falha ao salvar pessoa", ex);
+            JOptionPane.showMessageDialog(this, "Falha ao salvar pessoa: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
 
@@ -473,6 +611,10 @@ public class DialogCadCliente extends javax.swing.JDialog {
         txtTelefone.setValue(null);
         txtCEP.setValue(null);
         limparCamposEndereco();
+        jTextField1.setText("");
+        jFormattedTextField1.setText("R$");
+        RBCliente.setSelected(true);
+        atualizarCamposFuncionario();
     }
 
     private String getComboValue(javax.swing.JComboBox<String> combo) {
@@ -546,16 +688,43 @@ public class DialogCadCliente extends javax.swing.JDialog {
     }
 
 
+    private BigDecimal parseBigDecimal(String value) {
+        String text = value == null ? "" : value.trim();
+        if (text.isEmpty()) {
+            return null;
+        }
+        String normalized = text.replace(" ", "");
+        if (normalized.contains(",") && normalized.contains(".")) {
+            normalized = normalized.replace(".", "").replace(",", ".");
+        } else {
+            normalized = normalized.replace(",", ".");
+        }
+        try {
+            return new BigDecimal(normalized);
+        } catch (NumberFormatException ex) {
+            return null;
+        }
+    }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton RBCliente;
+    private javax.swing.JRadioButton RBFuncionario;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cmbCidade;
     private javax.swing.JComboBox<String> cmbUF;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.ButtonGroup groupTPessoa;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel labelBairro;
     private javax.swing.JLabel labelCEP;
     private javax.swing.JLabel labelCPF;
+    private javax.swing.JLabel labelCargo;
     private javax.swing.JLabel labelCidade;
     private javax.swing.JLabel labelDtNasc;
     private javax.swing.JLabel labelNome;
@@ -564,6 +733,7 @@ public class DialogCadCliente extends javax.swing.JDialog {
     private javax.swing.JLabel labelUF;
     private javax.swing.JPanel panelCadCliente;
     private javax.swing.JPanel panelContato;
+    private javax.swing.JPanel panelEndereco;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JFormattedTextField txtCEP;
     private javax.swing.JFormattedTextField txtCPF;

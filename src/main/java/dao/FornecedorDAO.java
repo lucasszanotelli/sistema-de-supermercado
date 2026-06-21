@@ -7,7 +7,7 @@ import org.hibernate.Transaction;
 
 import model.Fornecedor;
 
-public class FornecedorDAO {
+public class FornecedorDAO extends GenericDAO {
 
     public Fornecedor salvar(Fornecedor fornecedor) {
         Transaction transaction = null;
@@ -33,18 +33,4 @@ public class FornecedorDAO {
         }
     }
 
-    public List<Fornecedor> buscarPorNome(String filtro) {
-        String termo = filtro == null ? "" : filtro.trim().toLowerCase();
-        if (termo.isEmpty()) {
-            return listar();
-        }
-
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery(
-                    "from Fornecedor f where lower(f.nome) like :nome order by f.nome",
-                    Fornecedor.class)
-                    .setParameter("nome", "%" + termo + "%")
-                    .list();
-        }
-    }
 }
