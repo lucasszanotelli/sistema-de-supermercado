@@ -5,6 +5,20 @@
     <artifactId>GerenciaSupermercado</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>relatorios/**/*.jrxml</include>
+                    <include>relatorios/**/*.jasper</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
     <dependencies>
         <dependency>
             <groupId>org.netbeans.external</groupId>
@@ -26,10 +40,21 @@
             <artifactId>postgresql</artifactId>
             <version>42.7.10</version>
         </dependency>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.20.0</version>
+            <exclusions>
+              <exclusion>
+                <groupId>com.lowagie</groupId>
+                <artifactId>itext</artifactId>
+              </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>24</maven.compiler.release>
+        <maven.compiler.release>17</maven.compiler.release>
         <exec.mainClass>com.mycompany.gerenciasupermercado.GerenciaSupermercado</exec.mainClass>
     </properties>
 </project>

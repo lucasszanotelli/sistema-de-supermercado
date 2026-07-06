@@ -4,12 +4,14 @@
  */
 package view;
 
-import dao.ClienteDAO;
-import dao.FornecedorDAO;
+import controler.ControlerInterface;
+import java.sql.SQLException;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Cliente;
 import model.Fornecedor;
+import model.Funcionario;
 /**
  *
  * @author lucas
@@ -17,8 +19,7 @@ import model.Fornecedor;
 public class DialogPesq extends javax.swing.JDialog {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DialogPesq.class.getName());
-    private final ClienteDAO clienteDAO = new ClienteDAO();
-    private final FornecedorDAO fornecedorDAO = new FornecedorDAO();
+    private ControlerInterface controler;
 
     /**
      * Creates new form DialogPesqCliente
@@ -26,7 +27,7 @@ public class DialogPesq extends javax.swing.JDialog {
     public DialogPesq(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        btnBuscar.addActionListener(this::btnBuscarActionPerformed);
+        carregarControler();
         configurarTabela();
         carregarTabela(null);
     }
@@ -45,10 +46,13 @@ public class DialogPesq extends javax.swing.JDialog {
         btnBuscar = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaResult = new javax.swing.JTable();
+        btnCancelar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cliente", "Fornecedor" }));
+        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Cliente", "Fornecedor", "Funcionario" }));
         cmbTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbTipoActionPerformed(evt);
@@ -62,6 +66,11 @@ public class DialogPesq extends javax.swing.JDialog {
         });
 
         btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         tabelaResult.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -76,22 +85,51 @@ public class DialogPesq extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(tabelaResult);
 
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Excluir");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Relatórios");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPesq, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnBuscar))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(cmbTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(txtPesq, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(btnBuscar))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(22, 22, 22)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(33, 33, 33)
+                        .addComponent(btnCancelar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -104,7 +142,12 @@ public class DialogPesq extends javax.swing.JDialog {
                     .addComponent(btnBuscar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCancelar)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -123,10 +166,36 @@ public class DialogPesq extends javax.swing.JDialog {
         carregarTabela(txtPesq.getText());
     }//GEN-LAST:event_cmbTipoActionPerformed
 
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        gerarRelatorio();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        excluirSelecionado();
+    }
+
+    private void carregarControler() {
+        try {
+            controler = ControlerInterface.getInstance();
+        } catch (ClassNotFoundException | SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar o gerenciador de dominio. " + ex.getMessage());
+            dispose();
+        }
+    }
+
     private void configurarTabela() {
-        String[] colunas = isFornecedorSelecionado()
-                ? new String[] { "Id", "Nome", "CNPJ", "Contato" }
-                : new String[] { "Id", "Nome", "CPF", "Contato" };
+        String[] colunas;
+        if (isFornecedorSelecionado()) {
+            colunas = new String[] { "Id", "Nome", "CNPJ", "Contato" };
+        } else if (isFuncionarioSelecionado()) {
+            colunas = new String[] { "Id", "Nome", "CPF", "Cargo", "Contato" };
+        } else {
+            colunas = new String[] { "Id", "Nome", "CPF", "Contato" };
+        }
         DefaultTableModel model = new DefaultTableModel(new Object[][] {}, colunas) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -137,30 +206,51 @@ public class DialogPesq extends javax.swing.JDialog {
     }
 
     private void carregarTabela(String filtro) {
-        DefaultTableModel model = (DefaultTableModel) tabelaResult.getModel();
-        model.setRowCount(0);
-        if (isFornecedorSelecionado()) {
-            List<Fornecedor> fornecedores = fornecedorDAO.buscarPorCampo(Fornecedor.class, "nome", filtro);
-            for (Fornecedor fornecedor : fornecedores) {
-               
-                model.addRow(new Object[] {
-                    fornecedor.getIdPessoa(),
-                    fornecedor.getNome(),
-                    fornecedor.getCnpj(),
-                    fornecedor.getTelefone()
-                });
-            }
+        if (controler == null) {
             return;
         }
 
-        List<Cliente> clientes = clienteDAO.buscarPorCampo(Cliente.class, "nome", filtro);
-        for (Cliente cliente : clientes) {
-            model.addRow(new Object[] {
-                cliente.getIdPessoa(),
-                cliente.getNome(),
-                cliente.getCpf(),
-                cliente.getTelefone()
-            });
+        DefaultTableModel model = (DefaultTableModel) tabelaResult.getModel();
+        model.setRowCount(0);
+        try {
+            if (isFornecedorSelecionado()) {
+                List<Fornecedor> fornecedores = controler.getGerDominio().pesquisarFornecedores(filtro);
+                for (Fornecedor fornecedor : fornecedores) {
+                    model.addRow(new Object[] {
+                        fornecedor.getIdPessoa(),
+                        fornecedor.getNome(),
+                        fornecedor.getCnpj(),
+                        fornecedor.getTelefone()
+                    });
+                }
+                return;
+            }
+
+            if (isFuncionarioSelecionado()) {
+                List<Funcionario> funcionarios = controler.getGerDominio().pesquisarFuncionarios(filtro);
+                for (Funcionario funcionario : funcionarios) {
+                    model.addRow(new Object[] {
+                        funcionario.getIdPessoa(),
+                        funcionario.getNome(),
+                        funcionario.getCpf(),
+                        funcionario.getCargo(),
+                        funcionario.getTelefone()
+                    });
+                }
+                return;
+            }
+
+            List<Cliente> clientes = controler.getGerDominio().pesquisarClientes(filtro);
+            for (Cliente cliente : clientes) {
+                model.addRow(new Object[] {
+                    cliente.getIdPessoa(),
+                    cliente.getNome(),
+                    cliente.getCpf(),
+                    cliente.getTelefone()
+                });
+            }
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao carregar pesquisa. " + ex.getMessage());
         }
     }
 
@@ -169,11 +259,80 @@ public class DialogPesq extends javax.swing.JDialog {
         return selected != null && "Fornecedor".equalsIgnoreCase(selected.toString());
     }
 
+    private boolean isFuncionarioSelecionado() {
+        Object selected = cmbTipo.getSelectedItem();
+        return selected != null && "Funcionario".equalsIgnoreCase(selected.toString());
+    }
+
+    private void excluirSelecionado() {
+        int linha = tabelaResult.getSelectedRow();
+        if (linha < 0) {
+            JOptionPane.showMessageDialog(this, "Selecione um registro para excluir.");
+            return;
+        }
+
+        int linhaModelo = tabelaResult.convertRowIndexToModel(linha);
+        Object valorId = tabelaResult.getModel().getValueAt(linhaModelo, 0);
+        int id = Integer.parseInt(valorId.toString());
+        String nome = String.valueOf(tabelaResult.getModel().getValueAt(linhaModelo, 1));
+        String tipo = isFornecedorSelecionado() ? "fornecedor" : isFuncionarioSelecionado() ? "funcionario" : "cliente";
+
+        int opcao = JOptionPane.showConfirmDialog(
+                this,
+                "Deseja excluir o " + tipo + " " + nome + "?",
+                "Confirmar exclusao",
+                JOptionPane.YES_NO_OPTION);
+
+        if (opcao != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            if (isFornecedorSelecionado()) {
+                controler.getGerDominio().excluirFornecedor(id);
+            } else if (isFuncionarioSelecionado()) {
+                controler.getGerDominio().excluirFuncionario(id);
+            } else {
+                controler.getGerDominio().excluirCliente(id);
+            }
+            carregarTabela(txtPesq.getText());
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao excluir registro. " + ex.getMessage());
+        }
+    }
+
+    private void gerarRelatorio() {
+        if (controler == null) {
+            return;
+        }
+
+        try {
+            if (isFornecedorSelecionado()) {
+                controler.getGerRelatorios().relComLista(
+                        controler.getGerDominio().pesquisarFornecedores(txtPesq.getText()),
+                        "relClientes.jrxml");
+            } else if (isFuncionarioSelecionado()) {
+                controler.getGerRelatorios().relComLista(
+                        controler.getGerDominio().pesquisarFuncionarios(txtPesq.getText()),
+                        "relClientes.jrxml");
+            } else {
+                controler.getGerRelatorios().relComLista(
+                        controler.getGerDominio().pesquisarClientes(txtPesq.getText()),
+                        "relClientes.jrxml");
+            }
+        } catch (RuntimeException ex) {
+            JOptionPane.showMessageDialog(this, "Erro ao gerar relatorio. " + ex.getMessage());
+        }
+    }
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnBuscar;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JComboBox cmbTipo;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tabelaResult;
     private javax.swing.JTextField txtPesq;

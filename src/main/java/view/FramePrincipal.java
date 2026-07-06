@@ -22,11 +22,9 @@ public class FramePrincipal extends javax.swing.JFrame {
         menuCadastro = new javax.swing.JMenu();
         menuCadProduto = new javax.swing.JMenuItem();
         menuCadFornecedores = new javax.swing.JMenuItem();
-        manuCadCliente = new javax.swing.JMenuItem();
+        menuCadPessoa = new javax.swing.JMenuItem();
         menuRelatorio = new javax.swing.JMenu();
-        menuEstoque = new javax.swing.JMenu();
-        menuEntrada = new javax.swing.JMenuItem();
-        menuSaida = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         menuListagem = new javax.swing.JMenu();
         listagemCliente = new javax.swing.JMenuItem();
         listagemProduto = new javax.swing.JMenuItem();
@@ -51,32 +49,25 @@ public class FramePrincipal extends javax.swing.JFrame {
         });
         menuCadastro.add(menuCadFornecedores);
 
-        manuCadCliente.setText("Cliente");
-        manuCadCliente.addActionListener(new java.awt.event.ActionListener() {
+        menuCadPessoa.setText("Cliente");
+        menuCadPessoa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                manuCadClienteActionPerformed(evt);
+                menuCadPessoaActionPerformed(evt);
             }
         });
-        menuCadastro.add(manuCadCliente);
+        menuCadastro.add(menuCadPessoa);
 
         menuBar1.add(menuCadastro);
 
-        menuRelatorio.setText("Relatórios");
+        menuRelatorio.setText("Venda");
 
-        menuEstoque.setText("Venda");
-
-        menuEntrada.setText("Entrada");
-        menuEntrada.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem1.setText("Vender");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menuEntradaActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
             }
         });
-        menuEstoque.add(menuEntrada);
-
-        menuSaida.setText("Saída");
-        menuEstoque.add(menuSaida);
-
-        menuRelatorio.add(menuEstoque);
+        menuRelatorio.add(jMenuItem1);
 
         menuBar1.add(menuRelatorio);
 
@@ -91,6 +82,11 @@ public class FramePrincipal extends javax.swing.JFrame {
         menuListagem.add(listagemCliente);
 
         listagemProduto.setText("Produto");
+        listagemProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listagemProdutoActionPerformed(evt);
+            }
+        });
         menuListagem.add(listagemProduto);
 
         menuBar1.add(menuListagem);
@@ -119,31 +115,33 @@ public class FramePrincipal extends javax.swing.JFrame {
         controlInterface.abrirDialogCadFornecedores();
     }//GEN-LAST:event_menuCadFornecedoresActionPerformed
 
-    private void manuCadClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_manuCadClienteActionPerformed
+    private void menuCadPessoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCadPessoaActionPerformed
         controlInterface.abrirDialogCadCliente();
-    }//GEN-LAST:event_manuCadClienteActionPerformed
+    }//GEN-LAST:event_menuCadPessoaActionPerformed
 
     private void listagemClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listagemClienteActionPerformed
         controlInterface.abrirDialogPesqCliente();
     }//GEN-LAST:event_listagemClienteActionPerformed
 
-    private void menuEntradaActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         controlInterface.abrirDialogCadVenda();
-    }
-    
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void listagemProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listagemProdutoActionPerformed
+        controlInterface.abrirDialogListProduto();
+    }//GEN-LAST:event_listagemProdutoActionPerformed
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem listagemCliente;
     private javax.swing.JMenuItem listagemProduto;
-    private javax.swing.JMenuItem manuCadCliente;
     private javax.swing.JMenuBar menuBar1;
     private javax.swing.JMenuItem menuCadFornecedores;
+    private javax.swing.JMenuItem menuCadPessoa;
     private javax.swing.JMenuItem menuCadProduto;
     private javax.swing.JMenu menuCadastro;
-    private javax.swing.JMenuItem menuEntrada;
-    private javax.swing.JMenu menuEstoque;
     private javax.swing.JMenu menuListagem;
     private javax.swing.JMenu menuRelatorio;
-    private javax.swing.JMenuItem menuSaida;
     // End of variables declaration//GEN-END:variables
 }

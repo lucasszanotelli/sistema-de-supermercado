@@ -104,6 +104,8 @@ public class DialogCadPessoa extends javax.swing.JDialog {
         cmbUF = new javax.swing.JComboBox<>();
         labelCidade = new javax.swing.JLabel();
         cmbCidade = new javax.swing.JComboBox<>();
+        labelNumero = new javax.swing.JLabel();
+        spinnerNumero = new javax.swing.JSpinner();
         btnSalvar = new javax.swing.JButton();
         btnLimpar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
@@ -175,6 +177,8 @@ public class DialogCadPessoa extends javax.swing.JDialog {
 
         cmbCidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
+        labelNumero.setText("N°");
+
         javax.swing.GroupLayout panelEnderecoLayout = new javax.swing.GroupLayout(panelEndereco);
         panelEndereco.setLayout(panelEnderecoLayout);
         panelEnderecoLayout.setHorizontalGroup(
@@ -205,6 +209,12 @@ public class DialogCadPessoa extends javax.swing.JDialog {
                             .addComponent(txtBairro)
                             .addComponent(cmbCidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(6, 6, 6))
+            .addGroup(panelEnderecoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelNumero)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(spinnerNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelEnderecoLayout.setVerticalGroup(
             panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -225,7 +235,11 @@ public class DialogCadPessoa extends javax.swing.JDialog {
                         .addComponent(cmbUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(labelCidade)
                         .addComponent(cmbCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 24, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(panelEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelNumero)
+                    .addComponent(spinnerNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 17, Short.MAX_VALUE))
         );
 
         btnSalvar.setText("Salvar");
@@ -400,8 +414,8 @@ public class DialogCadPessoa extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(panelEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelEndereco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelCadClienteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSalvar)
                     .addComponent(btnLimpar)
@@ -540,6 +554,7 @@ public class DialogCadPessoa extends javax.swing.JDialog {
         String bairro = txtBairro.getText() == null ? "" : txtBairro.getText().trim();
         String cidade = getComboValue(cmbCidade);
         String uf = getComboValue(cmbUF);
+        int numero = (Integer) spinnerNumero.getValue();
         boolean funcionarioSelecionado = isFuncionarioSelecionado();
         String cargo = jTextField1.getText() == null ? "" : jTextField1.getText().trim();
         BigDecimal salario = funcionarioSelecionado ? parseBigDecimal(jFormattedTextField1.getText()) : null;
@@ -564,6 +579,7 @@ public class DialogCadPessoa extends javax.swing.JDialog {
         endereco.setBairro(bairro);
         endereco.setCidade(cidade);
         endereco.setUf(uf);
+        endereco.setNumero(numero);
 
         try {
             if (funcionarioSelecionado) {
@@ -610,6 +626,7 @@ public class DialogCadPessoa extends javax.swing.JDialog {
         txtDtNasc.setValue(null);
         txtTelefone.setValue(null);
         txtCEP.setValue(null);
+        spinnerNumero.setValue(0);
         limparCamposEndereco();
         jTextField1.setText("");
         jFormattedTextField1.setText("R$");
@@ -728,12 +745,14 @@ public class DialogCadPessoa extends javax.swing.JDialog {
     private javax.swing.JLabel labelCidade;
     private javax.swing.JLabel labelDtNasc;
     private javax.swing.JLabel labelNome;
+    private javax.swing.JLabel labelNumero;
     private javax.swing.JLabel labelRua;
     private javax.swing.JLabel labelTel;
     private javax.swing.JLabel labelUF;
     private javax.swing.JPanel panelCadCliente;
     private javax.swing.JPanel panelContato;
     private javax.swing.JPanel panelEndereco;
+    private javax.swing.JSpinner spinnerNumero;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JFormattedTextField txtCEP;
     private javax.swing.JFormattedTextField txtCPF;

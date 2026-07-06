@@ -57,4 +57,19 @@ public class ProdutoDAO extends GenericDAO {
             return session.createQuery("from Produto p order by p.nomeProduto", Produto.class).list();
         }
     }
+
+    public List<Produto> pesquisarPorNome(String filtro) {
+        String termo = filtro == null ? "" : filtro.trim().toLowerCase();
+        if (termo.isEmpty()) {
+            return listar();
+        }
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery(
+                    "from Produto p where lower(p.nomeProduto) like :termo order by p.nomeProduto",
+                    Produto.class)
+                    .setParameter("termo", "%" + termo + "%")
+                    .list();
+        }
+    }
 }

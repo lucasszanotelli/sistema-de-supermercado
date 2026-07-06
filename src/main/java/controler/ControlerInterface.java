@@ -18,6 +18,7 @@ import view.DialogCadPessoa;
 import view.DialogCadFornecedor;
 import view.DialogCadProduto;
 import view.DialogCadVenda;
+import view.DialogListProduto;
 import view.DialogPesq;
 import view.FramePrincipal;
 
@@ -34,12 +35,19 @@ public class ControlerInterface {
     DialogCadVenda dlgCadVenda = null;
     DialogPesq dlgPescCliente = null;
     DialogCadProduto dlcCadProduto = null;
+    DialogListProduto dlgListProduto = null;
     
     GerenciadorDominio gerDominio;
+    GerenciadorRelatorios gerRelatorios;
+
+    public GerenciadorRelatorios getGerRelatorios() {
+        return gerRelatorios;
+    }
 
     
     private ControlerInterface() throws ClassNotFoundException, SQLException{
         gerDominio = new GerenciadorDominio();
+        gerRelatorios = new GerenciadorRelatorios();
     }
 
     public static synchronized ControlerInterface getInstance() throws ClassNotFoundException, SQLException {
@@ -82,6 +90,9 @@ public class ControlerInterface {
     }
     public void abrirDialogCadVenda(){
         dlgCadVenda = (DialogCadVenda) abrirJanela(framePrincipal, dlgCadVenda, DialogCadVenda.class);
+    }
+    public void abrirDialogListProduto(){
+        dlgListProduto = (DialogListProduto) abrirJanela(framePrincipal, dlgListProduto, DialogListProduto.class);
     }
     
     public void carregarCombo(JComboBox combo){
